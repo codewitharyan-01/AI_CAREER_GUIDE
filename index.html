@@ -3,1013 +3,3567 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalized Career and Skills Advisor</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <title>The Compass - AI-Driven Career Discovery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --info: #2196f3;
+            --purple: #7209b7;
+            --pink: #f72585;
+            --transition: all 0.3s ease;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        :root {
-            --primary-color: #19376d;
-            --secondary-color: #576CBC;
-            --accent-color: #A5D7E8;
-            --light-color: #EEF5FF;
-            --text-color: #333;
-            --success-color: #4CAF50;
-            --warning-color: #FF9800;
-        }
-        
+
         body {
-            background-color: #f8f9fa;
-            color: var(--text-color);
-            line-height: 1.6;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            overflow-x: hidden;
+            position: relative;
         }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header Styles */
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
+
+        /* Background Animation */
+        .bg-animation {
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
         }
-        
-        .header-content {
+
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(67, 97, 238, 0.1);
+            animation: move 25s linear infinite;
+            bottom: -150px;
+        }
+
+        .bg-animation span:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation span:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .bg-animation span:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .bg-animation span:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .bg-animation span:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .bg-animation span:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .bg-animation span:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .bg-animation span:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .bg-animation span:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .bg-animation span:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.5s ease;
         }
-        
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         .logo {
             display: flex;
             align-items: center;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 700;
         }
-        
-        .logo .material-symbols-rounded {
-            font-size: 2rem;
-            margin-right: 0.5rem;
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+            animation: spin 10s linear infinite;
         }
-        
-        nav ul {
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .nav-links {
             display: flex;
             list-style: none;
         }
-        
-        nav ul li {
-            margin-left: 1.5rem;
+
+        .nav-links li {
+            margin-left: 2rem;
         }
-        
-        nav ul li a {
+
+        .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: var(--transition);
+            position: relative;
         }
-        
-        nav ul li a:hover {
-            color: var(--accent-color);
+
+        .nav-links a:hover {
+            color: var(--accent);
         }
-        
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .cta-button {
+            background-color: var(--accent);
+            color: var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.4);
+        }
+
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(25, 55, 109, 0.8), rgba(25, 55, 109, 0.8)), url('https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80');
-            background-size: cover;
-            background-position: center;
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.9), rgba(63, 55, 201, 0.9)), url('https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
             color: white;
-            padding: 5rem 0;
             text-align: center;
+            border-radius: 0 0 50px 50px;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
         .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
+            position: relative;
+            z-index: 1;
         }
-        
+
         .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease 0.2s;
+            animation-fill-mode: both;
+            position: relative;
+            z-index: 1;
         }
-        
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            animation: fadeInUp 1s ease 0.4s;
+            animation-fill-mode: both;
+            position: relative;
+            z-index: 1;
+        }
+
         .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--primary-color);
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            text-decoration: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
             font-weight: 600;
-            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
             border: none;
             cursor: pointer;
             font-size: 1rem;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
         .btn:hover {
-            background-color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        
-        /* Section Styles */
-        section {
-            padding: 4rem 0;
+
+        /* Stats Section */
+        .stats {
+            padding: 3rem 5%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
         }
-        
+
+        .stat-item {
+            text-align: center;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.1s; }
+        .stat-item:nth-child(2) { animation-delay: 0.2s; }
+        .stat-item:nth-child(3) { animation-delay: 0.3s; }
+        .stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 5%;
+        }
+
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
+            font-size: 2.8rem;
             margin-bottom: 1rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            width: 100%;
         }
-        
-        .section-title p {
-            font-size: 1.1rem;
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
             max-width: 700px;
-            margin: 0 auto;
-            color: #666;
+            margin: 0 auto 3rem;
+            color: #6c757d;
+            font-size: 1.1rem;
         }
-        
-        /* Profile Section */
-        .profile-form {
-            background-color: white;
-            border-radius: 10px;
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            max-width: 800px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: var(--accent);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .feature-card p {
+            color: #6c757d;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .feature-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-link:hover {
+            color: var(--accent);
+            gap: 0.8rem;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 5rem 5%;
+            background-color: white;
+        }
+
+        .process-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            max-width: 1200px;
             margin: 0 auto;
         }
-        
+
+        .process-container::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            right: 50px;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            z-index: 1;
+        }
+
+        .process-step {
+            flex: 1;
+            text-align: center;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border: 5px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .process-step:hover .step-number {
+            transform: scale(1.1);
+            border-color: var(--accent);
+        }
+
+        .process-step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .process-step p {
+            color: #6c757d;
+        }
+
+        /* Assessment Section */
+        .assessment {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, #f5f7ff, #e9ecef);
+        }
+
+        .assessment-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .assessment-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .assessment-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .assessment-tabs {
+            display: flex;
+            background: var(--primary);
+            flex-wrap: wrap;
+        }
+
+        .assessment-tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .assessment-tab.active {
+            background: white;
+            color: var(--primary);
+        }
+
+        .assessment-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--accent);
+        }
+
+        .assessment-content {
+            padding: 2rem;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
         .form-group {
             margin-bottom: 1.5rem;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
-            color: var(--primary-color);
+            color: var(--secondary);
         }
-        
+
         .form-control {
             width: 100%;
             padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
             font-size: 1rem;
+            transition: var(--transition);
         }
-        
+
         .form-control:focus {
             outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 2px rgba(87, 108, 188, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
-        
+
+        .progress-container {
+            margin: 2rem 0;
+        }
+
+        .progress {
+            height: 15px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 30px 30px;
+            animation: progress-animation 1s linear infinite;
+        }
+
+        @keyframes progress-animation {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .quiz-option {
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(67, 97, 238, 0.1);
+            transition: var(--transition);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-option:hover::before {
+            width: 100%;
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .quiz-option.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--success);
+        }
+
+        .quiz-option.error {
+            border-color: var(--danger);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Results Section */
+        .results {
+            padding: 5rem 5%;
+            background: white;
+        }
+
+        .results-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .result-card h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        .metric:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            height: 400px;
+        }
+
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .recommendation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-top: 5px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recommendation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, transparent 50%, rgba(67, 97, 238, 0.1) 50%);
+        }
+
+        .recommendation-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .recommendation-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .recommendation-card p {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+        }
+
+        .match-percentage {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .match-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-grow: 1;
+            margin: 0 1rem;
+        }
+
+        .match-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .match-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.3) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.3) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 20px 20px;
+            animation: progress-animation 1s linear infinite;
+        }
+
         .skills-container {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
         }
-        
+
         .skill-tag {
-            background-color: var(--light-color);
-            color: var(--primary-color);
-            padding: 0.5rem 1rem;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Profile Section */
+        .profile {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, #f5f7ff, #e9ecef);
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .profile-sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .profile-name {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 2rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .profile-stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .profile-menu {
+            list-style: none;
+        }
+
+        .profile-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            color: #6c757d;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .profile-menu a:hover,
+        .profile-menu a.active {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .profile-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-section {
+            display: none;
+        }
+
+        .profile-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .profile-section h3 {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .course-details {
+            margin-bottom: 2rem;
+        }
+
+        .course-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .course-description {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .course-reason {
+            background: rgba(67, 97, 238, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .course-reason h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-reason p {
+            color: #6c757d;
+        }
+
+        .roadmap {
+            margin-top: 2rem;
+        }
+
+        .roadmap h4 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .roadmap-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: #e9ecef;
+        }
+
+        .roadmap-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .roadmap-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -2.3rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        .roadmap-item h5 {
+            color: var(--secondary);
+            margin-bottom: 0.3rem;
+        }
+
+        .roadmap-item p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Community Section */
+        .community {
+            padding: 5rem 5%;
+            background: white;
+        }
+
+        .community-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .community-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .ask-question-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .ask-question-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .question-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .question-form.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            min-height: 45px;
+        }
+
+        .tag {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
             border-radius: 20px;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
+            gap: 0.3rem;
         }
-        
-        .skill-tag .material-symbols-rounded {
-            font-size: 1rem;
-            margin-left: 0.5rem;
+
+        .tag-remove {
             cursor: pointer;
+            font-size: 0.8rem;
         }
-        
-        /* Career Recommendations */
-        .career-cards {
+
+        .tag-input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            min-width: 100px;
+        }
+
+        .questions-feed {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            gap: 1.5rem;
         }
-        
-        .career-card {
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .career-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .career-card-header {
-            background-color: var(--primary-color);
-            color: white;
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
             padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
-        
-        .career-card-header h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+
+        .question-card:hover {
+            box-shadow: var(--shadow-hover);
         }
-        
-        .career-card-body {
-            padding: 1.5rem;
-        }
-        
-        .career-card-body p {
-            margin-bottom: 1rem;
-            color: #666;
-        }
-        
-        .match-percentage {
+
+        .question-header {
             display: flex;
             align-items: center;
+            gap: 1rem;
             margin-bottom: 1rem;
         }
-        
-        .match-percentage .material-symbols-rounded {
-            color: var(--success-color);
-            margin-right: 0.5rem;
-        }
-        
-        .match-percentage span {
+
+        .question-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
             font-weight: 600;
-            color: var(--success-color);
         }
-        
-        .skills-required {
+
+        .question-user {
+            flex-grow: 1;
+        }
+
+        .question-name {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .question-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .question-description {
+            color: #6c757d;
             margin-bottom: 1rem;
         }
-        
-        .skills-required h4 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-        
-        .skills-list {
+
+        .question-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
+            margin-bottom: 1rem;
         }
-        
-        .skill-badge {
-            background-color: var(--light-color);
-            color: var(--text-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
+
+        .question-actions {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+        }
+
+        .answers {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .answer {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .answer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 100%;
+            background: #e9ecef;
+        }
+
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--warning);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
             font-size: 0.8rem;
         }
-        
-        /* Skill Gap Analysis */
-        .skill-gap-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            max-width: 800px;
-            margin: 0 auto;
+
+        .answer-user {
+            flex-grow: 1;
         }
-        
-        .skill-gap-item {
-            margin-bottom: 1.5rem;
-        }
-        
-        .skill-gap-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-        
-        .skill-gap-header h4 {
-            color: var(--primary-color);
-        }
-        
-        .skill-gap-header .proficiency {
-            color: var(--warning-color);
+
+        .answer-name {
             font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.9rem;
         }
-        
-        .progress-bar {
-            height: 10px;
-            background-color: #eee;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-bottom: 0.5rem;
+
+        .answer-time {
+            font-size: 0.8rem;
+            color: #6c757d;
         }
-        
-        .progress {
-            height: 100%;
-            background-color: var(--secondary-color);
-            border-radius: 5px;
-        }
-        
-        .learning-resources {
-            margin-top: 0.5rem;
-        }
-        
-        .learning-resources h4 {
+
+        .answer-content {
+            color: #6c757d;
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
-            color: var(--primary-color);
         }
-        
-        .resource-link {
-            display: inline-block;
-            background-color: var(--light-color);
-            color: var(--primary-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            text-decoration: none;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-            transition: background-color 0.3s;
+
+        .answer-actions {
+            display: flex;
+            gap: 1rem;
         }
-        
-        .resource-link:hover {
-            background-color: var(--accent-color);
-        }
-        
+
         /* Footer */
         footer {
-            background-color: var(--primary-color);
+            background: var(--dark);
             color: white;
-            padding: 3rem 0 1rem;
+            padding: 4rem 5% 2rem;
         }
-        
-        .footer-content {
+
+        .footer-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
         }
-        
-        .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+
+        .footer-col h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
             position: relative;
             padding-bottom: 0.5rem;
         }
-        
-        .footer-column h3::after {
+
+        .footer-col h3::after {
             content: '';
             position: absolute;
-            left: 0;
             bottom: 0;
+            left: 0;
             width: 50px;
-            height: 2px;
-            background-color: var(--accent-color);
+            height: 3px;
+            background: var(--accent);
         }
-        
-        .footer-column ul {
+
+        .footer-col p, .footer-col li {
+            margin-bottom: 0.8rem;
+            color: #adb5bd;
+            line-height: 1.6;
+        }
+
+        .footer-col ul {
             list-style: none;
         }
-        
-        .footer-column ul li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .footer-column ul li a {
-            color: #ddd;
+
+        .footer-col a {
+            color: #adb5bd;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: var(--transition);
         }
-        
-        .footer-column ul li a:hover {
-            color: var(--accent-color);
+
+        .footer-col a:hover {
+            color: var(--accent);
         }
-        
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
         .copyright {
             text-align: center;
-            padding-top: 1.5rem;
+            padding-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #adb5bd;
             font-size: 0.9rem;
-            color: #ddd;
         }
-        
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            
-            nav ul {
-                margin-top: 1rem;
-            }
-            
-            nav ul li {
-                margin: 0 0.5rem;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .section-title h2 {
-                font-size: 2rem;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-        
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6c757d;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .modal h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal p {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
         /* Notification */
         .notification {
             position: fixed;
-            top: 100px;
+            bottom: 20px;
             right: 20px;
-            background-color: white;
+            background: white;
             padding: 1rem 1.5rem;
-            border-radius: 5px;
+            border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
             display: flex;
             align-items: center;
-            max-width: 300px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 3000;
+            max-width: 350px;
         }
-        
+
         .notification.show {
             transform: translateX(0);
         }
-        
-        .notification .material-symbols-rounded {
-            margin-right: 0.5rem;
-            color: var(--success-color);
+
+        .notification-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
         }
-        
-        .notification.error .material-symbols-rounded {
-            color: #f44336;
+
+        .notification.success .notification-icon {
+            color: var(--success);
         }
-        
-        /* Loading Spinner */
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            border-top: 4px solid var(--primary-color);
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-            display: none;
+
+        .notification.error .notification-icon {
+            color: var(--danger);
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .notification.info .notification-icon {
+            color: var(--info);
         }
-        
-        .loading {
-            display: block;
+
+        .notification-content {
+            flex-grow: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .process-container {
+                flex-direction: column;
+            }
+            
+            .process-container::before {
+                display: none;
+            }
+            
+            .process-step {
+                margin-bottom: 2rem;
+            }
+            
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 2rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 3rem 5%;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .community-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .question-form {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <span class="material-symbols-rounded">psychology</span>
-                CareerPath AI
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#profile">Profile</a></li>
-                    <li><a href="#careers">Careers</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                </ul>
-            </nav>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <i class="fas fa-compass"></i>
+            The Compass
         </div>
-    </header>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#process">How It Works</a></li>
+            <li><a href="#assessment">Assessment</a></li>
+            <li><a href="#results">Results</a></li>
+            <li><a href="#profile">Profile</a></li>
+            <li><a href="#community">Community</a></li>
+        </ul>
+        <div class="user-menu">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <a href="#" class="cta-button" id="getStartedBtn">Get Started</a>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <h1>Personalized Career and Skills Advisor</h1>
-            <p>AI-powered guidance to map your skills, recommend career paths, and prepare you for the evolving job market</p>
-            <a href="#profile" class="btn">Get Started</a>
+    <section class="hero" id="home">
+        <h1>Navigate Your Future with Confidence</h1>
+        <p>The Compass is an AI-driven personalized career discovery platform designed to help students make informed decisions after their 10th standard. Discover your strengths, explore diverse pathways, and chart a course toward a fulfilling career.</p>
+        <div class="hero-buttons">
+            <a href="#assessment" class="btn btn-primary">Start Your Journey</a>
+            <a href="#features" class="btn btn-outline">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat-item">
+            <div class="stat-number" data-target="50000">0</div>
+            <div class="stat-label">Students Guided</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-target="1200">0</div>
+            <div class="stat-label">Career Paths</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-target="98">0</div>
+            <div class="stat-label">% Satisfaction</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-target="500">0</div>
+            <div class="stat-label">Expert Mentors</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Comprehensive Career Guidance</h2>
+        <p class="section-subtitle">Our platform offers a holistic approach to career discovery, combining advanced technology with personalized insights.</p>
+        
+        <div class="features-container">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>AI-Powered Analysis</h3>
+                <p>Our sophisticated algorithms analyze your academic history, interests, aptitudes, and personality traits to generate personalized career recommendations.</p>
+                <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Multi-Dimensional Profiling</h3>
+                <p>We go beyond grades to understand your unique strengths, interests, values, and aspirations, creating a comprehensive profile that reflects who you are.</p>
+                <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Educational Pathways</h3>
+                <p>Explore detailed information about streams, courses, and institutions that align with your profile, including practical considerations like budget and location.</p>
+                <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Mentorship Network</h3>
+                <p>Connect with experienced professionals and alumni who can provide valuable insights, guidance, and real-world perspectives on various career paths.</p>
+                <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Skill Development</h3>
+                <p>Receive personalized learning paths and resources to help you develop the skills needed for your chosen career, ensuring you're well-prepared for the future.</p>
+                <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3>Future-Ready Insights</h3>
+                <p>Stay ahead with real-time industry trends and emerging career opportunities, ensuring your choices align with the evolving job market.</p>
+                <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="process">
+        <h2 class="section-title">How The Compass Works</h2>
+        <p class="section-subtitle">Our simple four-step process guides you from uncertainty to clarity.</p>
+        
+        <div class="process-container">
+            <div class="process-step">
+                <div class="step-number">1</div>
+                <h3>Comprehensive Profiling</h3>
+                <p>Share your academic history, interests, aptitudes, and aspirations through our interactive assessment modules.</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">2</div>
+                <h3>AI Analysis</h3>
+                <p>Our advanced algorithms analyze your profile to identify patterns, strengths, and potential career matches.</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">3</div>
+                <h3>Personalized Recommendations</h3>
+                <p>Receive detailed insights and recommendations tailored to your unique profile, including suitable streams and courses.</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">4</div>
+                <h3>Continuous Support</h3>
+                <p>Access learning resources, mentorship opportunities, and ongoing guidance as you progress on your chosen path.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section class="assessment" id="assessment">
+        <h2 class="section-title">Discover Your Potential</h2>
+        <p class="section-subtitle">Our comprehensive assessment helps uncover your strengths, interests, and aspirations.</p>
+        
+        <div class="assessment-container">
+            <div class="assessment-header">
+                <h2>Personalized Assessment</h2>
+                <p>Complete all sections to get your personalized career recommendations</p>
+            </div>
+            
+            <div class="assessment-tabs">
+                <div class="assessment-tab active" data-tab="academic">
+                    <i class="fas fa-book"></i> Academic
+                </div>
+                <div class="assessment-tab" data-tab="interests">
+                    <i class="fas fa-heart"></i> Interests
+                </div>
+                <div class="assessment-tab" data-tab="aptitude">
+                    <i class="fas fa-brain"></i> Aptitude
+                </div>
+                <div class="assessment-tab" data-tab="personality">
+                    <i class="fas fa-user"></i> Personality
+                </div>
+                <div class="assessment-tab" data-tab="values">
+                    <i class="fas fa-star"></i> Values
+                </div>
+            </div>
+            
+            <div class="assessment-content">
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <p style="text-align: center; margin-top: 0.5rem;">Completion: <span id="progressText">0%</span></p>
+                </div>
+                
+                <!-- Academic Profile Tab -->
+                <div class="tab-pane active" id="academic">
+                    <h3>Academic History</h3>
+                    <p>Please provide information about your academic performance from 5th to 10th standard.</p>
+                    
+                    <div class="form-group">
+                        <label for="schoolBoard">Education Board *</label>
+                        <select class="form-control" id="schoolBoard" required>
+                            <option value="">Select your board</option>
+                            <option value="cbse">CBSE</option>
+                            <option value="icse">ICSE</option>
+                            <option value="state">State Board</option>
+                            <option value="ib">International Baccalaureate</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="grades">Grades (5th to 10th standard) *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">Please provide your overall percentage or grade for each year.</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                            <div>
+                                <label for="grade5">5th Standard *</label>
+                                <input type="text" class="form-control" id="grade5" placeholder="e.g., 85%" required>
+                            </div>
+                            <div>
+                                <label for="grade6">6th Standard *</label>
+                                <input type="text" class="form-control" id="grade6" placeholder="e.g., 82%" required>
+                            </div>
+                            <div>
+                                <label for="grade7">7th Standard *</label>
+                                <input type="text" class="form-control" id="grade7" placeholder="e.g., 88%" required>
+                            </div>
+                            <div>
+                                <label for="grade8">8th Standard *</label>
+                                <input type="text" class="form-control" id="grade8" placeholder="e.g., 90%" required>
+                            </div>
+                            <div>
+                                <label for="grade9">9th Standard *</label>
+                                <input type="text" class="form-control" id="grade9" placeholder="e.g., 87%" required>
+                            </div>
+                            <div>
+                                <label for="grade10">10th Standard *</label>
+                                <input type="text" class="form-control" id="grade10" placeholder="e.g., 92%" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="favoriteSubjects">Favorite Subjects *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">Select the subjects you enjoy the most (you must select at least one).</p>
+                        <div class="quiz-options" id="subjectsOptions">
+                            <div class="quiz-option">Mathematics</div>
+                            <div class="quiz-option">Science</div>
+                            <div class="quiz-option">English</div>
+                            <div class="quiz-option">History</div>
+                            <div class="quiz-option">Geography</div>
+                            <div class="quiz-option">Computer Science</div>
+                            <div class="quiz-option">Art</div>
+                            <div class="quiz-option">Physical Education</div>
+                            <div class="quiz-option">Economics</div>
+                            <div class="quiz-option">Psychology</div>
+                            <div class="quiz-option">Languages</div>
+                            <div class="quiz-option">Music</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="academicStrengths">Academic Strengths *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">What are your strongest academic areas? (You must select at least one)</p>
+                        <div class="quiz-options" id="strengthsOptions">
+                            <div class="quiz-option">Problem Solving</div>
+                            <div class="quiz-option">Critical Thinking</div>
+                            <div class="quiz-option">Memorization</div>
+                            <div class="quiz-option">Research</div>
+                            <div class="quiz-option">Creative Writing</div>
+                            <div class="quiz-option">Public Speaking</div>
+                            <div class="quiz-option">Lab Work</div>
+                            <div class="quiz-option">Group Projects</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="academicNext">Continue to Interests <i class="fas fa-arrow-right"></i></button>
+                </div>
+                
+                <!-- Interests & Hobbies Tab -->
+                <div class="tab-pane" id="interests">
+                    <h3>Interests & Hobbies</h3>
+                    <p>Tell us about your interests and hobbies outside of academics.</p>
+                    
+                    <div class="form-group">
+                        <label for="hobbies">Your Hobbies *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">Select activities you enjoy in your free time (you must select at least one).</p>
+                        <div class="quiz-options" id="hobbiesOptions">
+                            <div class="quiz-option">Reading</div>
+                            <div class="quiz-option">Sports</div>
+                            <div class="quiz-option">Music</div>
+                            <div class="quiz-option">Art & Craft</div>
+                            <div class="quiz-option">Gaming</div>
+                            <div class="quiz-option">Cooking</div>
+                            <div class="quiz-option">Writing</div>
+                            <div class="quiz-option">Photography</div>
+                            <div class="quiz-option">Coding</div>
+                            <div class="quiz-option">Gardening</div>
+                            <div class="quiz-option">Dancing</div>
+                            <div class="quiz-option">Traveling</div>
+                            <div class="quiz-option">Movies</div>
+                            <div class="quiz-option">Social Media</div>
+                            <div class="quiz-option">Volunteering</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interestAreas">Areas of Interest *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">Which fields interest you the most? (You must select at least one)</p>
+                        <div class="quiz-options" id="interestsAreasOptions">
+                            <div class="quiz-option">Technology</div>
+                            <div class="quiz-option">Healthcare</div>
+                            <div class="quiz-option">Business</div>
+                            <div class="quiz-option">Arts & Design</div>
+                            <div class="quiz-option">Environment</div>
+                            <div class="quiz-option">Education</div>
+                            <div class="quiz-option">Media & Entertainment</div>
+                            <div class="quiz-option">Sports</div>
+                            <div class="quiz-option">Social Work</div>
+                            <div class="quiz-option">Research</div>
+                            <div class="quiz-option">Law</div>
+                            <div class="quiz-option">Finance</div>
+                            <div class="quiz-option">Marketing</div>
+                            <div class="quiz-option">Hospitality</div>
+                            <div class="quiz-option">Agriculture</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="extracurricular">Extracurricular Activities</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">Have you participated in any clubs, competitions, or events?</p>
+                        <textarea class="form-control" id="extracurricular" rows="3" placeholder="e.g., Science Olympiad, Debate Club, Sports Tournament, etc."></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-outline" id="interestsPrev"><i class="fas fa-arrow-left"></i> Back</button>
+                        <button class="btn btn-primary" id="interestsNext">Continue to Aptitude <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Aptitude Test Tab -->
+                <div class="tab-pane" id="aptitude">
+                    <h3>Cognitive Aptitude Assessment</h3>
+                    <p>This assessment helps identify your natural strengths and abilities. There are no right or wrong answers.</p>
+                    
+                    <div class="form-group">
+                        <label>Question 1 of 5 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">Which pattern comes next in the sequence?</p>
+                        <div style="display: flex; justify-content: space-around; margin-bottom: 1.5rem;">
+                            <div style="text-align: center;">
+                                <div style="width: 60px; height: 60px; background: #e9ecef; border-radius: 5px; margin-bottom: 0.5rem;"></div>
+                                <span>A</span>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="width: 60px; height: 60px; background: #e9ecef; border-radius: 5px; margin-bottom: 0.5rem;"></div>
+                                <span>B</span>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="width: 60px; height: 60px; background: #e9ecef; border-radius: 5px; margin-bottom: 0.5rem;"></div>
+                                <span>C</span>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="width: 60px; height: 60px; background: #e9ecef; border-radius: 5px; margin-bottom: 0.5rem;"></div>
+                                <span>D</span>
+                            </div>
+                        </div>
+                        <div class="quiz-options" id="aptitudeQ1">
+                            <div class="quiz-option">A</div>
+                            <div class="quiz-option">B</div>
+                            <div class="quiz-option">C</div>
+                            <div class="quiz-option">D</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Question 2 of 5 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">If all Bloops are Razzies and all Razzies are Loppies, then all Bloops are definitely Loppies?</p>
+                        <div class="quiz-options" id="aptitudeQ2">
+                            <div class="quiz-option">True</div>
+                            <div class="quiz-option">False</div>
+                            <div class="quiz-option">Cannot determine</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Question 3 of 5 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">Which number should come next in the pattern: 3, 6, 12, 24, ?</p>
+                        <div class="quiz-options" id="aptitudeQ3">
+                            <div class="quiz-option">36</div>
+                            <div class="quiz-option">48</div>
+                            <div class="quiz-option">72</div>
+                            <div class="quiz-option">96</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Question 4 of 5 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">Which word does not belong: Apple, Banana, Carrot, Orange?</p>
+                        <div class="quiz-options" id="aptitudeQ4">
+                            <div class="quiz-option">Apple</div>
+                            <div class="quiz-option">Banana</div>
+                            <div class="quiz-option">Carrot</div>
+                            <div class="quiz-option">Orange</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Question 5 of 5 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">If you rearrange the letters "CIFAIPC" you would have the name of a:</p>
+                        <div class="quiz-options" id="aptitudeQ5">
+                            <div class="quiz-option">City</div>
+                            <div class="quiz-option">Animal</div>
+                            <div class="quiz-option">Ocean</div>
+                            <div class="quiz-option">Country</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-outline" id="aptitudePrev"><i class="fas fa-arrow-left"></i> Back</button>
+                        <button class="btn btn-primary" id="aptitudeNext">Continue to Personality <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Personality Tab -->
+                <div class="tab-pane" id="personality">
+                    <h3>Personality Assessment</h3>
+                    <p>Understanding your personality traits helps identify work environments where you're likely to thrive.</p>
+                    
+                    <div class="form-group">
+                        <label>Question 1 of 4 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">At social gatherings, you tend to:</p>
+                        <div class="quiz-options" id="personalityQ1">
+                            <div class="quiz-option">Energize by interacting with many people</div>
+                            <div class="quiz-option">Prefer deeper conversations with fewer people</div>
+                            <div class="quiz-option">Feel drained after socializing</div>
+                            <div class="quiz-option">Enjoy being the center of attention</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Question 2 of 4 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">When making decisions, you rely more on:</p>
+                        <div class="quiz-options" id="personalityQ2">
+                            <div class="quiz-option">Logic and objective analysis</div>
+                            <div class="quiz-option">Personal values and impact on others</div>
+                            <div class="quiz-option">Past experiences and traditions</div>
+                            <div class="quiz-option">Intuition and future possibilities</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Question 3 of 4 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">You prefer work that is:</p>
+                        <div class="quiz-options" id="personalityQ3">
+                            <div class="quiz-option">Structured and planned</div>
+                            <div class="quiz-option">Flexible and adaptable</div>
+                            <div class="quiz-option">Results-oriented</div>
+                            <div class="quiz-option">Process-oriented</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Question 4 of 4 *</label>
+                        <p style="font-weight: 500; margin-bottom: 1rem;">How do you handle stress and pressure?</p>
+                        <div class="quiz-options" id="personalityQ4">
+                            <div class="quiz-option">Create a detailed plan and follow it systematically</div>
+                            <div class="quiz-option">Talk to others and seek support</div>
+                            <div class="quiz-option">Take time alone to reflect and recharge</div>
+                            <div class="quiz-option">Tackle it head-on with energy and enthusiasm</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-outline" id="personalityPrev"><i class="fas fa-arrow-left"></i> Back</button>
+                        <button class="btn btn-primary" id="personalityNext">Continue to Values <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Values Tab -->
+                <div class="tab-pane" id="values">
+                    <h3>Career Values & Aspirations</h3>
+                    <p>Understanding what you value most in a career helps ensure long-term satisfaction and success.</p>
+                    
+                    <div class="form-group">
+                        <label for="careerValues">Career Values *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">What do you value most in a future career? (You must select at least one)</p>
+                        <div class="quiz-options" id="careerValuesOptions">
+                            <div class="quiz-option">Financial Security</div>
+                            <div class="quiz-option">Work-Life Balance</div>
+                            <div class="quiz-option">Creative Freedom</div>
+                            <div class="quiz-option">Social Impact</div>
+                            <div class="quiz-option">Intellectual Challenge</div>
+                            <div class="quiz-option">Leadership Opportunities</div>
+                            <div class="quiz-option">Stability</div>
+                            <div class="quiz-option">Recognition</div>
+                            <div class="quiz-option">Flexibility</div>
+                            <div class="quiz-option">Team Collaboration</div>
+                            <div class="quiz-option">Independence</div>
+                            <div class="quiz-option">Innovation</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="workEnvironment">Preferred Work Environment *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">Where do you see yourself working? (You must select at least one)</p>
+                        <div class="quiz-options" id="workEnvironmentOptions">
+                            <div class="quiz-option">Office/Corporate Setting</div>
+                            <div class="quiz-option">Laboratory/Research Facility</div>
+                            <div class="quiz-option">Outdoors/Field Work</div>
+                            <div class="quiz-option">Remote/From Home</div>
+                            <div class="quiz-option">Hospital/Clinic</div>
+                            <div class="quiz-option">School/Educational Institution</div>
+                            <div class="quiz-option">Studio/Creative Space</div>
+                            <div class="quiz-option">Startup/Entrepreneurial</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="longTermGoals">Long-Term Goals *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">Where do you see yourself in 10 years? (You must select at least one)</p>
+                        <div class="quiz-options" id="longTermGoalsOptions">
+                            <div class="quiz-option">Industry Expert/Specialist</div>
+                            <div class="quiz-option">Team Leader/Manager</div>
+                            <div class="quiz-option">Business Owner/Entrepreneur</div>
+                            <div class="quiz-option">Researcher/Academic</div>
+                            <div class="quiz-option">Consultant/Advisor</div>
+                            <div class="quiz-option">Creative Professional</div>
+                            <div class="quiz-option">Social Impact Leader</div>
+                            <div class="quiz-option">International Career</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget">Education Budget *</label>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">What is your family's approximate annual budget for higher education?</p>
+                        <div class="quiz-options" id="budgetOptions">
+                            <div class="quiz-option">Under ₹1 Lakh</div>
+                            <div class="quiz-option">₹1-5 Lakhs</div>
+                            <div class="quiz-option">₹5-10 Lakhs</div>
+                            <div class="quiz-option">₹10-20 Lakhs</div>
+                            <div class="quiz-option">Above ₹20 Lakhs</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-outline" id="valuesPrev"><i class="fas fa-arrow-left"></i> Back</button>
+                        <button class="btn btn-primary" id="valuesSubmit">Complete Assessment <i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results" id="results">
+        <h2 class="section-title">Your Personalized Career Compass</h2>
+        <p class="section-subtitle">Based on your assessment, here are your personalized insights and recommendations.</p>
+        
+        <div class="results-container">
+            <div class="result-card">
+                <h2>Your Career Profile</h2>
+                <p>Our AI has analyzed your responses and created a comprehensive profile of your strengths, interests, and potential career paths.</p>
+                
+                <div class="result-metrics">
+                    <div class="metric">
+                        <div class="metric-value">Analytical</div>
+                        <div class="metric-label">Thinking Style</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Science Match</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">88%</div>
+                        <div class="metric-label">Technology Match</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">85%</div>
+                        <div class="metric-label">Research Match</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="skillsChart"></canvas>
+            </div>
+            
+            <div class="recommendations">
+                <div class="recommendation-card">
+                    <h3>Science Stream (PCM)</h3>
+                    <p>With your strong analytical skills and interest in Mathematics and Science, the Science stream with Physics, Chemistry, and Mathematics is highly recommended for you.</p>
+                    
+                    <div class="match-percentage">
+                        <span>Match</span>
+                        <div class="match-bar">
+                            <div class="match-fill" style="width: 92%;"></div>
+                        </div>
+                        <span>92%</span>
+                    </div>
+                    
+                    <p><strong>Why it fits:</strong> Your aptitude for logical reasoning and problem-solving, combined with your academic performance in Science subjects, makes this an ideal path for you.</p>
+                    
+                    <div class="skills-container">
+                        <span class="skill-tag">Problem Solving</span>
+                        <span class="skill-tag">Critical Thinking</span>
+                        <span class="skill-tag">Mathematics</span>
+                        <span class="skill-tag">Research</span>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="showStreamDetails('science')">Explore Science Careers</button>
+                </div>
+                
+                <div class="recommendation-card">
+                    <h3>Computer Science & Engineering</h3>
+                    <p>Your interest in technology and strong logical reasoning skills make Computer Science & Engineering an excellent career choice for you.</p>
+                    
+                    <div class="match-percentage">
+                        <span>Match</span>
+                        <div class="match-bar">
+                            <div class="match-fill" style="width: 88%;"></div>
+                        </div>
+                        <span>88%</span>
+                    </div>
+                    
+                    <p><strong>Why it fits:</strong> Your aptitude for pattern recognition and problem-solving, combined with your interest in technology, aligns perfectly with this field.</p>
+                    
+                    <div class="skills-container">
+                        <span class="skill-tag">Programming</span>
+                        <span class="skill-tag">Algorithm Design</span>
+                        <span class="skill-tag">Logical Reasoning</span>
+                        <span class="skill-tag">Innovation</span>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="showStreamDetails('computer')">Explore CS Careers</button>
+                </div>
+                
+                <div class="recommendation-card">
+                    <h3>Data Science</h3>
+                    <p>An emerging field that combines your analytical skills with your interest in technology and research, Data Science offers promising career opportunities.</p>
+                    
+                    <div class="match-percentage">
+                        <span>Match</span>
+                        <div class="match-bar">
+                            <div class="match-fill" style="width: 85%;"></div>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    
+                    <p><strong>Why it fits:</strong> Your strong quantitative skills and interest in finding patterns in data make you well-suited for this rapidly growing field.</p>
+                    
+                    <div class="skills-container">
+                        <span class="skill-tag">Statistics</span>
+                        <span class="skill-tag">Data Analysis</span>
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Critical Thinking</span>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="showStreamDetails('data')">Explore Data Science</button>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Profile Section -->
-    <section id="profile" class="container">
-        <div class="section-title">
-            <h2>Create Your Profile</h2>
-            <p>Tell us about yourself to receive personalized career recommendations</p>
-        </div>
+    <section class="profile" id="profile">
+        <h2 class="section-title">Your Career Profile</h2>
+        <p class="section-subtitle">View detailed insights about your recommended career paths and roadmaps to success</p>
         
-        <form class="profile-form" id="profileForm">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-avatar" id="profileAvatar">U</div>
+                <h3 class="profile-name" id="profileName">User Name</h3>
+                <p class="profile-email" id="profileEmail">user@example.com</p>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">3</div>
+                        <div class="profile-stat-label">Recommendations</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">92%</div>
+                        <div class="profile-stat-label">Match Rate</div>
+                    </div>
+                </div>
+                
+                <ul class="profile-menu">
+                    <li><a href="#" class="profile-menu-link active" data-section="overview">Overview</a></li>
+                    <li><a href="#" class="profile-menu-link" data-section="science">Science Stream</a></li>
+                    <li><a href="#" class="profile-menu-link" data-section="computer">Computer Science</a></li>
+                    <li><a href="#" class="profile-menu-link" data-section="data">Data Science</a></li>
+                </ul>
             </div>
             
-            <div class="form-group">
-                <label for="education">Education Level</label>
-                <select id="education" class="form-control" required>
-                    <option value="">Select your education level</option>
-                    <option value="high-school">High School</option>
-                    <option value="undergraduate">Undergraduate</option>
-                    <option value="graduate">Graduate</option>
-                    <option value="postgraduate">Postgraduate</option>
-                </select>
+            <div class="profile-content">
+                <div class="profile-section active" id="overview">
+                    <h3>Career Overview</h3>
+                    <p>Based on your comprehensive assessment, we've identified three career paths that align with your strengths, interests, and values. Each recommendation is tailored to your unique profile and includes detailed insights and a roadmap to help you succeed.</p>
+                    
+                    <div class="course-details">
+                        <div class="course-header">
+                            <div class="course-icon">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <h4 class="course-title">Science Stream (PCM)</h4>
+                        </div>
+                        <p class="course-description">The Science stream with Physics, Chemistry, and Mathematics opens up numerous career opportunities in engineering, research, and technology.</p>
+                        
+                        <div class="course-reason">
+                            <h4>Why This Path Fits You</h4>
+                            <p>Your strong analytical skills and aptitude for logical reasoning make this an ideal path. Your high performance in Mathematics and Science subjects, combined with your interest in problem-solving, aligns perfectly with this stream.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="course-details">
+                        <div class="course-header">
+                            <div class="course-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <h4 class="course-title">Computer Science & Engineering</h4>
+                        </div>
+                        <p class="course-description">Computer Science & Engineering is a rapidly growing field with diverse opportunities in software development, AI, cybersecurity, and more.</p>
+                        
+                        <div class="course-reason">
+                            <h4>Why This Path Fits You</h4>
+                            <p>Your interest in technology and strong logical reasoning skills make this field an excellent choice. Your aptitude for pattern recognition and problem-solving, combined with your interest in technology, aligns perfectly with this career path.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="course-details">
+                        <div class="course-header">
+                            <div class="course-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4 class="course-title">Data Science</h4>
+                        </div>
+                        <p class="course-description">Data Science combines statistics, programming, and domain knowledge to extract insights from data and drive decision-making.</p>
+                        
+                        <div class="course-reason">
+                            <h4>Why This Path Fits You</h4>
+                            <p>Your strong quantitative skills and interest in finding patterns in data make you well-suited for this rapidly growing field. Your analytical thinking and research abilities align perfectly with the demands of a data scientist.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-section" id="science">
+                    <h3>Science Stream (PCM) - Detailed Roadmap</h3>
+                    
+                    <div class="course-details">
+                        <div class="course-header">
+                            <div class="course-icon">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <h4 class="course-title">Science Stream (PCM)</h4>
+                        </div>
+                        <p class="course-description">The Science stream with Physics, Chemistry, and Mathematics opens up numerous career opportunities in engineering, research, and technology.</p>
+                        
+                        <div class="course-reason">
+                            <h4>Why This Path Fits You</h4>
+                            <p>Your strong analytical skills and aptitude for logical reasoning make this an ideal path. Your high performance in Mathematics and Science subjects, combined with your interest in problem-solving, aligns perfectly with this stream.</p>
+                        </div>
+                        
+                        <div class="roadmap">
+                            <h4>Roadmap to Success</h4>
+                            <div class="roadmap-timeline">
+                                <div class="roadmap-item">
+                                    <h5>11th & 12th Grade</h5>
+                                    <p>Focus on Physics, Chemistry, and Mathematics with consistent performance. Participate in science Olympiads and competitions.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Entrance Exams</h5>
+                                    <p>Prepare for JEE Main & Advanced, BITSAT, or other engineering entrance exams. Join coaching if needed.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>College Selection</h5>
+                                    <p>Choose between IITs, NITs, BITS Pilani, or other reputed engineering colleges based on your rank and interests.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Specialization</h5>
+                                    <p>Select a specialization like Mechanical, Civil, Electrical, Computer Science, etc., based on your interests and strengths.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Internships & Projects</h5>
+                                    <p>Gain practical experience through internships and projects during college. Build a strong portfolio.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Higher Studies or Job</h5>
+                                    <p>Decide between pursuing higher studies (M.Tech, MS) or entering the job market based on your career goals.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="course-reason">
+                            <h4>Tips for Success</h4>
+                            <ul style="color: #6c757d; padding-left: 1.5rem;">
+                                <li>Develop strong problem-solving skills through regular practice.</li>
+                                <li>Join study groups to discuss complex concepts.</li>
+                                <li>Stay updated with the latest developments in science and technology.</li>
+                                <li>Participate in hackathons and science fairs to enhance practical knowledge.</li>
+                                <li>Build a network with peers and professionals in the field.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-section" id="computer">
+                    <h3>Computer Science & Engineering - Detailed Roadmap</h3>
+                    
+                    <div class="course-details">
+                        <div class="course-header">
+                            <div class="course-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <h4 class="course-title">Computer Science & Engineering</h4>
+                        </div>
+                        <p class="course-description">Computer Science & Engineering is a rapidly growing field with diverse opportunities in software development, AI, cybersecurity, and more.</p>
+                        
+                        <div class="course-reason">
+                            <h4>Why This Path Fits You</h4>
+                            <p>Your interest in technology and strong logical reasoning skills make this field an excellent choice. Your aptitude for pattern recognition and problem-solving, combined with your interest in technology, aligns perfectly with this career path.</p>
+                        </div>
+                        
+                        <div class="roadmap">
+                            <h4>Roadmap to Success</h4>
+                            <div class="roadmap-timeline">
+                                <div class="roadmap-item">
+                                    <h5>11th & 12th Grade</h5>
+                                    <p>Focus on Mathematics and Computer Science if available. Learn programming languages like Python or Java.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Entrance Exams</h5>
+                                    <p>Prepare for JEE Main & Advanced, BITSAT, or other engineering entrance exams with focus on Computer Science.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>College Selection</h5>
+                                    <p>Choose colleges with strong Computer Science programs like IITs, IIITs, BITS Pilani, or NITs.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Skill Development</h5>
+                                    <p>Master programming languages, data structures, algorithms, and software development practices.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Specialization</h5>
+                                    <p>Choose a specialization like AI/ML, Web Development, Mobile Development, Cybersecurity, etc.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Internships & Projects</h5>
+                                    <p>Build a strong portfolio of projects. Complete internships at tech companies to gain real-world experience.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Career Growth</h5>
+                                    <p>Stay updated with the latest technologies. Consider higher studies or certifications for specialized roles.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="course-reason">
+                            <h4>Tips for Success</h4>
+                            <ul style="color: #6c757d; padding-left: 1.5rem;">
+                                <li>Practice coding regularly on platforms like LeetCode, HackerRank.</li>
+                                <li>Contribute to open-source projects to gain experience.</li>
+                                <li>Build a strong online presence on GitHub and LinkedIn.</li>
+                                <li>Network with professionals through tech meetups and conferences.</li>
+                                <li>Develop soft skills like communication and teamwork.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-section" id="data">
+                    <h3>Data Science - Detailed Roadmap</h3>
+                    
+                    <div class="course-details">
+                        <div class="course-header">
+                            <div class="course-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4 class="course-title">Data Science</h4>
+                        </div>
+                        <p class="course-description">Data Science combines statistics, programming, and domain knowledge to extract insights from data and drive decision-making.</p>
+                        
+                        <div class="course-reason">
+                            <h4>Why This Path Fits You</h4>
+                            <p>Your strong quantitative skills and interest in finding patterns in data make you well-suited for this rapidly growing field. Your analytical thinking and research abilities align perfectly with the demands of a data scientist.</p>
+                        </div>
+                        
+                        <div class="roadmap">
+                            <h4>Roadmap to Success</h4>
+                            <div class="roadmap-timeline">
+                                <div class="roadmap-item">
+                                    <h5>11th & 12th Grade</h5>
+                                    <p>Focus on Mathematics and Statistics. Learn programming languages like Python or R.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Undergraduate Studies</h5>
+                                    <p>Pursue a degree in Computer Science, Statistics, Mathematics, or related fields. Take courses in data analysis and machine learning.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Technical Skills</h5>
+                                    <p>Master programming (Python/R), SQL, data visualization, and machine learning algorithms.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Practical Experience</h5>
+                                    <p>Work on real-world datasets. Participate in Kaggle competitions. Complete internships in data-driven roles.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Specialization</h5>
+                                    <p>Choose a specialization like Machine Learning, Big Data, Business Intelligence, or Data Engineering.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Advanced Education</h5>
+                                    <p>Consider pursuing a Master's degree or specialized certifications in Data Science or related fields.</p>
+                                </div>
+                                <div class="roadmap-item">
+                                    <h5>Career Growth</h5>
+                                    <p>Build a strong portfolio of projects. Stay updated with the latest tools and techniques in the field.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="course-reason">
+                            <h4>Tips for Success</h4>
+                            <ul style="color: #6c757d; padding-left: 1.5rem;">
+                                <li>Develop strong statistical and mathematical foundations.</li>
+                                <li>Practice with real-world datasets from various domains.</li>
+                                <li>Learn to communicate data insights effectively to non-technical audiences.</li>
+                                <li>Stay curious and keep learning about new tools and techniques.</li>
+                                <li>Build a network with other data professionals through meetups and online communities.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="field">Field of Study</label>
-                <input type="text" id="field" class="form-control" placeholder="e.g., Computer Science, Business, Engineering" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="interests">Career Interests</label>
-                <input type="text" id="interests" class="form-control" placeholder="e.g., Technology, Marketing, Healthcare">
-            </div>
-            
-            <div class="form-group">
-                <label for="skill-input">Your Skills</label>
-                <input type="text" id="skill-input" class="form-control" placeholder="Type a skill and press Enter">
-                <div class="skills-container" id="skills-container"></div>
-            </div>
-            
-            <button type="submit" class="btn">Save Profile</button>
-            <div class="spinner" id="profile-spinner"></div>
-        </form>
+        </div>
     </section>
 
-    <!-- Career Recommendations Section -->
-    <section id="careers" class="container">
-        <div class="section-title">
-            <h2>Career Recommendations</h2>
-            <p>Based on your profile, here are some career paths that might suit you</p>
-        </div>
+    <!-- Community Section -->
+    <section class="community" id="community">
+        <h2 class="section-title">Career Community</h2>
+        <p class="section-subtitle">Ask questions, share knowledge, and connect with mentors and peers</p>
         
-        <div class="career-cards" id="career-cards">
-            <!-- Career cards will be dynamically generated here -->
-        </div>
-    </section>
-
-    <!-- Skill Gap Analysis Section -->
-    <section id="skills" class="container">
-        <div class="section-title">
-            <h2>Skill Gap Analysis</h2>
-            <p>Identify the skills you need to develop for your chosen career path</p>
-        </div>
-        
-        <div class="skill-gap-container" id="skill-gap-container">
-            <p style="text-align: center; color: #666;">Select a career from the recommendations above to see skill gap analysis</p>
+        <div class="community-container">
+            <div class="community-header">
+                <h3>Recent Questions</h3>
+                <a href="#" class="ask-question-btn" id="askQuestionBtn">
+                    <i class="fas fa-plus"></i> Ask a Question
+                </a>
+            </div>
+            
+            <div class="question-form" id="questionForm">
+                <h3>Ask a Question</h3>
+                <form id="newQuestionForm">
+                    <div class="form-group">
+                        <label for="questionTitle">Question Title *</label>
+                        <input type="text" class="form-control" id="questionTitle" placeholder="What's your question?" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionDescription">Description *</label>
+                        <textarea class="form-control" id="questionDescription" rows="4" placeholder="Provide more details about your question..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionTags">Tags</label>
+                        <div class="tags-input" id="tagsInput">
+                            <div class="tag" style="display: none;">
+                                <span class="tag-text"></span>
+                                <span class="tag-remove">&times;</span>
+                            </div>
+                            <input type="text" class="tag-input" placeholder="Add tags...">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" class="btn btn-outline" id="cancelQuestion">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Post Question</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="questions-feed" id="questionsFeed">
+                <!-- Question 1 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-avatar">A</div>
+                        <div class="question-user">
+                            <div class="question-name">Ananya Sharma</div>
+                            <div class="question-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    <h4 class="question-title">What are the best career options after 12th PCB other than MBBS?</h4>
+                    <p class="question-description">I'm a 12th-grade student with PCB subjects. I'm not interested in MBBS but want to explore other medical or healthcare-related careers. What are some good options with good scope and salary?</p>
+                    <div class="question-tags">
+                        <span class="tag">Medical</span>
+                        <span class="tag">PCB</span>
+                        <span class="tag">Career Options</span>
+                    </div>
+                    <div class="question-actions">
+                        <a href="#" class="action-btn"><i class="fas fa-arrow-up"></i> 24</a>
+                        <a href="#" class="action-btn"><i class="fas fa-comment"></i> 8 Answers</a>
+                        <a href="#" class="action-btn"><i class="fas fa-share"></i> Share</a>
+                    </div>
+                    
+                    <div class="answers">
+                        <div class="answer">
+                            <div class="answer-header">
+                                <div class="answer-avatar">M</div>
+                                <div class="answer-user">
+                                    <div class="answer-name">Dr. Mehta</div>
+                                    <div class="answer-time">1 hour ago</div>
+                                </div>
+                            </div>
+                            <p class="answer-content">There are several excellent options after PCB besides MBBS. You can consider BDS (Dentistry), BAMS (Ayurveda), BHMS (Homeopathy), B.V.Sc & AH (Veterinary Science), B.Pharm (Pharmacy), or B.Sc in specialized fields like Biotechnology, Microbiology, or Biochemistry. Each has good career prospects depending on your interests.</p>
+                            <div class="answer-actions">
+                                <a href="#" class="action-btn"><i class="fas fa-arrow-up"></i> 12</a>
+                                <a href="#" class="action-btn"><i class="fas fa-reply"></i> Reply</a>
+                            </div>
+                        </div>
+                        
+                        <div class="answer">
+                            <div class="answer-header">
+                                <div class="answer-avatar">R</div>
+                                <div class="answer-user">
+                                    <div class="answer-name">Rahul Kumar</div>
+                                    <div class="answer-time">45 minutes ago</div>
+                                </div>
+                            </div>
+                            <p class="answer-content">I'd recommend looking into B.Sc Nursing or Physiotherapy. Both have high demand and good salary potential. Nursing especially has opportunities worldwide. You could also consider clinical research or medical transcription if you're interested in the healthcare industry but not direct patient care.</p>
+                            <div class="answer-actions">
+                                <a href="#" class="action-btn"><i class="fas fa-arrow-up"></i> 8</a>
+                                <a href="#" class="action-btn"><i class="fas fa-reply"></i> Reply</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 2 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-avatar">V</div>
+                        <div class="question-user">
+                            <div class="question-name">Vikram Singh</div>
+                            <div class="question-time">5 hours ago</div>
+                        </div>
+                    </div>
+                    <h4 class="question-title">Is it worth pursuing a career in animation in India?</h4>
+                    <p class="question-description">I'm passionate about animation and have been learning 3D modeling and animation software. I'm wondering if there are good career opportunities in India or if I should consider moving abroad for better prospects.</p>
+                    <div class="question-tags">
+                        <span class="tag">Animation</span>
+                        <span class="tag">Creative</span>
+                        <span class="tag">Career Guidance</span>
+                    </div>
+                    <div class="question-actions">
+                        <a href="#" class="action-btn"><i class="fas fa-arrow-up"></i> 18</a>
+                        <a href="#" class="action-btn"><i class="fas fa-comment"></i> 5 Answers</a>
+                        <a href="#" class="action-btn"><i class="fas fa-share"></i> Share</a>
+                    </div>
+                    
+                    <div class="answers">
+                        <div class="answer">
+                            <div class="answer-header">
+                                <div class="answer-avatar">P</div>
+                                <div class="answer-user">
+                                    <div class="answer-name">Priya Desai</div>
+                                    <div class="answer-time">3 hours ago</div>
+                                </div>
+                            </div>
+                            <p class="answer-content">The animation industry in India is growing rapidly with many international studios setting up operations here. With the rise of OTT platforms and gaming, there's increasing demand for animators. While salaries may not match international standards initially, with experience and specialization, you can earn well. I'd recommend building a strong portfolio and networking within the industry.</p>
+                            <div class="answer-actions">
+                                <a href="#" class="action-btn"><i class="fas fa-arrow-up"></i> 15</a>
+                                <a href="#" class="action-btn"><i class="fas fa-reply"></i> Reply</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-avatar">S</div>
+                        <div class="question-user">
+                            <div class="question-name">Sneha Patel</div>
+                            <div class="question-time">1 day ago</div>
+                        </div>
+                    </div>
+                    <h4 class="question-title">How to prepare for UPSC while doing graduation?</h4>
+                    <p class="question-description">I'm a first-year BA student and I want to prepare for UPSC Civil Services. How can I balance my graduation studies with UPSC preparation? What's the best strategy?</p>
+                    <div class="question-tags">
+                        <span class="tag">UPSC</span>
+                        <span class="tag">Civil Services</span>
+                        <span class="tag">Preparation</span>
+                    </div>
+                    <div class="question-actions">
+                        <a href="#" class="action-btn"><i class="fas fa-arrow-up"></i> 32</a>
+                        <a href="#" class="action-btn"><i class="fas fa-comment"></i> 12 Answers</a>
+                        <a href="#" class="action-btn"><i class="fas fa-share"></i> Share</a>
+                    </div>
+                    
+                    <div class="answers">
+                        <div class="answer">
+                            <div class="answer-header">
+                                <div class="answer-avatar">A</div>
+                                <div class="answer-user">
+                                    <div class="answer-name">Amit Joshi</div>
+                                    <div class="answer-time">20 hours ago</div>
+                                </div>
+                            </div>
+                            <p class="answer-content">Balancing UPSC preparation with graduation is challenging but possible. Start by reading newspapers daily and making notes. Choose graduation subjects that overlap with UPSC syllabus like History, Political Science, or Public Administration. Dedicate 2-3 hours daily for UPSC studies and increase during holidays. Join a test series in the final year to evaluate your preparation.</p>
+                            <div class="answer-actions">
+                                <a href="#" class="action-btn"><i class="fas fa-arrow-up"></i> 28</a>
+                                <a href="#" class="action-btn"><i class="fas fa-reply"></i> Reply</a>
+                            </div>
+                        </div>
+                        
+                        <div class="answer">
+                            <div class="answer-header">
+                                <div class="answer-avatar">N</div>
+                                <div class="answer-user">
+                                    <div class="answer-name">Neha Sharma</div>
+                                    <div class="answer-time">18 hours ago</div>
+                                </div>
+                            </div>
+                            <p class="answer-content">I prepared for UPSC while doing my BA and cleared it in my third attempt. My advice: focus on understanding concepts rather than rote learning. Use your graduation studies to build a strong foundation in your optional subject. Make a realistic timetable and stick to it. Most importantly, take care of your health and don't burn out.</p>
+                            <div class="answer-actions">
+                                <a href="#" class="action-btn"><i class="fas fa-arrow-up"></i> 22</a>
+                                <a href="#" class="action-btn"><i class="fas fa-reply"></i> Reply</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>About Us</h3>
-                    <p>CareerPath AI is an innovative platform that leverages artificial intelligence to provide personalized career guidance for students.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#profile">Profile</a></li>
-                        <li><a href="#careers">Careers</a></li>
-                        <li><a href="#skills">Skills</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <ul>
-                        <li>Email: info@careerpathai.com</li>
-                        <li>Phone: +91 98765 43210</li>
-                        <li>Address: Bangalore, India</li>
-                    </ul>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>The Compass</h3>
+                <p>Empowering students to navigate their post-10th crossroads with confidence through AI-driven personalized career discovery.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             
-            <div class="copyright">
-                <p>&copy; 2023 CareerPath AI. All rights reserved.</p>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#process">How It Works</a></li>
+                    <li><a href="#assessment">Assessment</a></li>
+                    <li><a href="#results">Results</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#community">Community</a></li>
+                </ul>
             </div>
+            
+            <div class="footer-col">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Career Blog</a></li>
+                    <li><a href="#">Success Stories</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Knowledge City, Bangalore 560001</p>
+                <p><i class="fas fa-phone"></i> +91 80 1234 5678</p>
+                <p><i class="fas fa-envelope"></i> info@thecompass.ai</p>
+                <p><i class="fas fa-clock"></i> Mon-Fri: 9AM-6PM</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 The Compass. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--danger);"></i> for students</p>
         </div>
     </footer>
 
+    <!-- Stream Details Modal -->
+    <div class="modal" id="streamModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle">Career Path Details</h2>
+            <div id="modalContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Notification -->
     <div class="notification" id="notification">
-        <span class="material-symbols-rounded">check_circle</span>
-        <span id="notification-message">Profile saved successfully!</span>
+        <div class="notification-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="notification-content">
+            <div class="notification-title">Success!</div>
+            <div class="notification-message" id="notificationMessage">Your action was completed successfully.</div>
+        </div>
     </div>
 
     <script>
-        // Sample data for career recommendations
-        const careerData = [
-            {
-                title: "Software Developer",
-                description: "Design, develop and test software applications and systems.",
-                match: 85,
-                skills: ["Programming", "Problem Solving", "Algorithms", "Data Structures"]
-            },
-            {
-                title: "Data Scientist",
-                description: "Analyze complex data to help organizations make better decisions.",
-                match: 75,
-                skills: ["Statistics", "Machine Learning", "Data Visualization", "Python"]
-            },
-            {
-                title: "UX Designer",
-                description: "Create intuitive and engaging user experiences for digital products.",
-                match: 70,
-                skills: ["User Research", "Wireframing", "Prototyping", "Visual Design"]
-            },
-            {
-                title: "Product Manager",
-                description: "Guide the success of a product and lead the team responsible for it.",
-                match: 65,
-                skills: ["Strategy", "Leadership", "Communication", "Market Research"]
-            },
-            {
-                title: "Digital Marketing Specialist",
-                description: "Develop and implement marketing strategies to promote products or services online.",
-                match: 60,
-                skills: ["SEO", "Content Marketing", "Analytics", "Social Media"]
-            },
-            {
-                title: "Business Analyst",
-                description: "Bridge the gap between IT and business by analyzing processes and requirements.",
-                match: 55,
-                skills: ["Requirements Analysis", "Process Modeling", "Data Analysis", "Communication"]
-            }
-        ];
-
-        // Sample data for skill gap analysis
-        const skillGapData = {
-            "Software Developer": [
-                {
-                    skill: "Programming",
-                    proficiency: 70,
-                    resources: ["Codecademy", "freeCodeCamp", "LeetCode"]
-                },
-                {
-                    skill: "Problem Solving",
-                    proficiency: 65,
-                    resources: ["HackerRank", "Codewars", "Project Euler"]
-                },
-                {
-                    skill: "Algorithms",
-                    proficiency: 60,
-                    resources: ["Coursera Algorithms", "GeeksforGeeks", "Khan Academy"]
-                },
-                {
-                    skill: "Data Structures",
-                    proficiency: 55,
-                    resources: ["Udemy Data Structures", "MIT OpenCourseWare", "YouTube Tutorials"]
-                }
-            ],
-            "Data Scientist": [
-                {
-                    skill: "Statistics",
-                    proficiency: 75,
-                    resources: ["Khan Academy Statistics", "Coursera Statistics", "edX Statistics"]
-                },
-                {
-                    skill: "Machine Learning",
-                    proficiency: 65,
-                    resources: ["Coursera ML", "Udacity ML", "fast.ai"]
-                },
-                {
-                    skill: "Data Visualization",
-                    proficiency: 60,
-                    resources: ["Tableau Public", "DataCamp Visualization", "Kaggle Learn"]
-                },
-                {
-                    skill: "Python",
-                    proficiency: 70,
-                    resources: ["Python.org", "Codecademy Python", "Real Python"]
-                }
-            ],
-            "UX Designer": [
-                {
-                    skill: "User Research",
-                    proficiency: 65,
-                    resources: ["Nielsen Norman Group", "UX Collective", "Interaction Design Foundation"]
-                },
-                {
-                    skill: "Wireframing",
-                    proficiency: 70,
-                    resources: ["Figma Learn", "Balsamiq", "Sketch"]
-                },
-                {
-                    skill: "Prototyping",
-                    proficiency: 60,
-                    resources: ["InVision", "Adobe XD", "Proto.io"]
-                },
-                {
-                    skill: "Visual Design",
-                    proficiency: 55,
-                    resources: ["Canva Design School", "Dribbble", "Behance"]
-                }
-            ],
-            "Product Manager": [
-                {
-                    skill: "Strategy",
-                    proficiency: 60,
-                    resources: ["Product School", "Reforge", "Mind the Product"]
-                },
-                {
-                    skill: "Leadership",
-                    proficiency: 65,
-                    resources: ["Coursera Leadership", "LinkedIn Learning", "Harvard ManageMentor"]
-                },
-                {
-                    skill: "Communication",
-                    proficiency: 70,
-                    resources: ["Toastmasters", "Coursera Communication", "TED Talks"]
-                },
-                {
-                    skill: "Market Research",
-                    proficiency: 55,
-                    resources: ["Coursera Market Research", "Udemy Research", "Market Research Society"]
-                }
-            ],
-            "Digital Marketing Specialist": [
-                {
-                    skill: "SEO",
-                    proficiency: 65,
-                    resources: ["Moz Academy", "SEMrush Academy", "HubSpot SEO"]
-                },
-                {
-                    skill: "Content Marketing",
-                    proficiency: 70,
-                    resources: ["Content Marketing Institute", "HubSpot Content", "Copyblogger"]
-                },
-                {
-                    skill: "Analytics",
-                    proficiency: 60,
-                    resources: ["Google Analytics Academy", "Coursera Analytics", "DataCamp"]
-                },
-                {
-                    skill: "Social Media",
-                    proficiency: 75,
-                    resources: ["Hootsuite Academy", "Facebook Blueprint", "Twitter Flight School"]
-                }
-            ],
-            "Business Analyst": [
-                {
-                    skill: "Requirements Analysis",
-                    proficiency: 65,
-                    resources: ["BA Times", "IIBA", "Modern Analyst"]
-                },
-                {
-                    skill: "Process Modeling",
-                    proficiency: 60,
-                    resources: ["BPM Institute", "Lucidchart", "Visio Tutorials"]
-                },
-                {
-                    skill: "Data Analysis",
-                    proficiency: 55,
-                    resources: ["DataCamp", "Coursera Data Analysis", "Udemy Business Analysis"]
-                },
-                {
-                    skill: "Communication",
-                    proficiency: 70,
-                    resources: ["Toastmasters", "Coursera Communication", "TED Talks"]
-                }
-            ]
-        };
-
-        // DOM elements
-        const profileForm = document.getElementById('profileForm');
-        const skillInput = document.getElementById('skill-input');
-        const skillsContainer = document.getElementById('skills-container');
-        const careerCards = document.getElementById('career-cards');
-        const skillGapContainer = document.getElementById('skill-gap-container');
+        // DOM Elements
+        const assessmentTabs = document.querySelectorAll('.assessment-tab');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const modal = document.getElementById('streamModal');
+        const closeModal = document.querySelectorAll('.close-modal');
         const notification = document.getElementById('notification');
-        const notificationMessage = document.getElementById('notification-message');
-        const profileSpinner = document.getElementById('profile-spinner');
-
-        // User data
-        let userProfile = {
-            name: '',
-            education: '',
-            field: '',
-            interests: '',
-            skills: []
+        const notificationMessage = document.getElementById('notificationMessage');
+        const userAvatar = document.getElementById('userAvatar');
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        const profileMenuLinks = document.querySelectorAll('.profile-menu-link');
+        const profileSections = document.querySelectorAll('.profile-section');
+        const askQuestionBtn = document.getElementById('askQuestionBtn');
+        const questionForm = document.getElementById('questionForm');
+        const cancelQuestion = document.getElementById('cancelQuestion');
+        const newQuestionForm = document.getElementById('newQuestionForm');
+        const tagsInput = document.getElementById('tagsInput');
+        const tagInput = tagsInput.querySelector('.tag-input');
+        const stats = document.querySelectorAll('.stat-number');
+        
+        // User state
+        let currentUser = null;
+        let selectedOptions = {
+            academic: [],
+            interests: [],
+            aptitude: [],
+            personality: [],
+            values: []
         };
-
-        // Initialize the app
-        function init() {
-            // Load user profile from localStorage if exists
-            const savedProfile = localStorage.getItem('userProfile');
-            if (savedProfile) {
-                userProfile = JSON.parse(savedProfile);
-                populateForm();
-                generateCareerCards();
-            } else {
-                // Generate default career cards
-                generateCareerCards();
-            }
-
-            // Add event listeners
-            profileForm.addEventListener('submit', saveProfile);
-            skillInput.addEventListener('keypress', addSkill);
-        }
-
-        // Populate form with saved profile data
-        function populateForm() {
-            document.getElementById('name').value = userProfile.name;
-            document.getElementById('education').value = userProfile.education;
-            document.getElementById('field').value = userProfile.field;
-            document.getElementById('interests').value = userProfile.interests;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize progress bar
+            updateProgressBar();
             
-            // Display skills
-            userProfile.skills.forEach(skill => {
-                addSkillTag(skill);
+            // Initialize stats counter
+            initStatsCounter();
+            
+            // Initialize skills chart
+            initSkillsChart();
+            
+            // Load user from localStorage if exists
+            loadUser();
+            
+            // Initialize tags input
+            initTagsInput();
+        });
+        
+        // Tab Navigation for Assessment
+        assessmentTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                assessmentTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update active tab pane
+                tabPanes.forEach(pane => {
+                    pane.classList.remove('active');
+                    if (pane.id === tabId) {
+                        pane.classList.add('active');
+                    }
+                });
+                
+                // Update progress bar
+                updateProgressBar();
             });
+        });
+        
+        // Quiz Options Selection (Multi-select with validation)
+        document.querySelectorAll('.quiz-options').forEach(optionsGroup => {
+            const options = optionsGroup.querySelectorAll('.quiz-option');
+            
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    const parent = option.parentNode;
+                    const tabId = parent.closest('.tab-pane').id;
+                    
+                    // Toggle selection
+                    option.classList.toggle('selected');
+                    
+                    // Update selected options
+                    if (option.classList.contains('selected')) {
+                        if (!selectedOptions[tabId].includes(option.textContent)) {
+                            selectedOptions[tabId].push(option.textContent);
+                        }
+                    } else {
+                        selectedOptions[tabId] = selectedOptions[tabId].filter(opt => opt !== option.textContent);
+                    }
+                    
+                    // Remove error class if present
+                    option.classList.remove('error');
+                    
+                    // Update progress
+                    updateProgressBar();
+                });
+            });
+        });
+        
+        // Navigation Buttons
+        document.getElementById('academicNext').addEventListener('click', () => {
+            if (validateTab('academic')) {
+                document.querySelector('[data-tab="interests"]').click();
+                showNotification('Moving to Interests & Hobbies section', 'info');
+            }
+        });
+        
+        document.getElementById('interestsPrev').addEventListener('click', () => {
+            document.querySelector('[data-tab="academic"]').click();
+        });
+        
+        document.getElementById('interestsNext').addEventListener('click', () => {
+            if (validateTab('interests')) {
+                document.querySelector('[data-tab="aptitude"]').click();
+                showNotification('Moving to Aptitude Test section', 'info');
+            }
+        });
+        
+        document.getElementById('aptitudePrev').addEventListener('click', () => {
+            document.querySelector('[data-tab="interests"]').click();
+        });
+        
+        document.getElementById('aptitudeNext').addEventListener('click', () => {
+            if (validateTab('aptitude')) {
+                document.querySelector('[data-tab="personality"]').click();
+                showNotification('Moving to Personality Assessment section', 'info');
+            }
+        });
+        
+        document.getElementById('personalityPrev').addEventListener('click', () => {
+            document.querySelector('[data-tab="aptitude"]').click();
+        });
+        
+        document.getElementById('personalityNext').addEventListener('click', () => {
+            if (validateTab('personality')) {
+                document.querySelector('[data-tab="values"]').click();
+                showNotification('Moving to Values section', 'info');
+            }
+        });
+        
+        document.getElementById('valuesPrev').addEventListener('click', () => {
+            document.querySelector('[data-tab="personality"]').click();
+        });
+        
+        document.getElementById('valuesSubmit').addEventListener('click', () => {
+            if (validateTab('values')) {
+                showNotification('Assessment completed successfully! Generating your personalized career profile...', 'success');
+                
+                // Simulate processing time
+                setTimeout(() => {
+                    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+                    showNotification('Your personalized career recommendations are ready!', 'success');
+                }, 2000);
+            }
+        });
+        
+        // Progress Bar Update
+        function updateProgressBar() {
+            const activeTab = document.querySelector('.assessment-tab.active');
+            const tabIndex = Array.from(assessmentTabs).indexOf(activeTab);
+            const progress = ((tabIndex + 1) / assessmentTabs.length) * 100;
+            
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
         }
-
-        // Add skill when Enter key is pressed
-        function addSkill(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const skill = skillInput.value.trim();
-                if (skill && !userProfile.skills.includes(skill)) {
-                    userProfile.skills.push(skill);
-                    addSkillTag(skill);
-                    skillInput.value = '';
+        
+        // Validate Tab
+        function validateTab(tabId) {
+            const tab = document.getElementById(tabId);
+            const requiredFields = tab.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+            
+            // Check required fields
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'var(--danger)';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e9ecef';
                 }
+            });
+            
+            // Check multi-select groups (quiz-options) in this tab
+            const multiSelectGroups = tab.querySelectorAll('.quiz-options');
+            multiSelectGroups.forEach(group => {
+                const selectedOptions = group.querySelectorAll('.quiz-option.selected');
+                if (selectedOptions.length === 0) {
+                    // Highlight the group
+                    group.style.border = '2px solid var(--danger)';
+                    group.style.borderRadius = '8px';
+                    
+                    // Add error class to options
+                    group.querySelectorAll('.quiz-option').forEach(option => {
+                        option.classList.add('error');
+                    });
+                    
+                    isValid = false;
+                } else {
+                    group.style.border = 'none';
+                    group.querySelectorAll('.quiz-option').forEach(option => {
+                        option.classList.remove('error');
+                    });
+                }
+            });
+            
+            if (!isValid) {
+                showNotification('Please fill in all required fields and select at least one option in each group', 'error');
             }
+            
+            return isValid;
         }
-
-        // Add skill tag to the UI
-        function addSkillTag(skill) {
-            const skillTag = document.createElement('div');
-            skillTag.className = 'skill-tag';
-            skillTag.innerHTML = `
-                ${skill}
-                <span class="material-symbols-rounded" data-skill="${skill}">close</span>
-            `;
-            skillsContainer.appendChild(skillTag);
+        
+        // Modal Functions
+        function showStreamDetails(stream) {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
             
-            // Add event listener to remove skill
-            skillTag.querySelector('.material-symbols-rounded').addEventListener('click', removeSkill);
-        }
-
-        // Remove skill from profile and UI
-        function removeSkill(e) {
-            const skill = e.target.dataset.skill;
-            userProfile.skills = userProfile.skills.filter(s => s !== skill);
-            e.target.parentElement.remove();
-        }
-
-        // Save profile to localStorage
-        function saveProfile(e) {
-            e.preventDefault();
-            
-            // Show loading spinner
-            profileSpinner.classList.add('loading');
-            
-            // Get form values
-            userProfile.name = document.getElementById('name').value;
-            userProfile.education = document.getElementById('education').value;
-            userProfile.field = document.getElementById('field').value;
-            userProfile.interests = document.getElementById('interests').value;
-            
-            // Save to localStorage
-            localStorage.setItem('userProfile', JSON.stringify(userProfile));
-            
-            // Simulate API call delay
-            setTimeout(() => {
-                // Hide loading spinner
-                profileSpinner.classList.remove('loading');
-                
-                // Show notification
-                showNotification('Profile saved successfully!');
-                
-                // Generate career cards based on updated profile
-                generateCareerCards();
-            }, 1000);
-        }
-
-        // Generate career cards based on user profile
-        function generateCareerCards() {
-            careerCards.innerHTML = '';
-            
-            // Sort careers by match percentage
-            const sortedCareers = [...careerData].sort((a, b) => b.match - a.match);
-            
-            // Create career cards
-            sortedCareers.forEach(career => {
-                const card = document.createElement('div');
-                card.className = 'career-card';
-                card.innerHTML = `
-                    <div class="career-card-header">
-                        <h3>${career.title}</h3>
-                    </div>
-                    <div class="career-card-body">
-                        <p>${career.description}</p>
-                        <div class="match-percentage">
-                            <span class="material-symbols-rounded">trending_up</span>
-                            <span>${career.match}% match</span>
-                        </div>
-                        <div class="skills-required">
-                            <h4>Key Skills Required:</h4>
-                            <div class="skills-list">
-                                ${career.skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('')}
-                            </div>
-                        </div>
-                        <button class="btn" data-career="${career.title}">Analyze Skill Gap</button>
-                    </div>
+            // Set content based on stream
+            if (stream === 'science') {
+                modalTitle.textContent = 'Science Stream (PCM) Career Paths';
+                modalContent.innerHTML = `
+                    <p>The Science stream with Physics, Chemistry, and Mathematics opens up numerous career opportunities in engineering, research, and technology.</p>
+                    
+                    <h3>Top Career Options:</h3>
+                    <ul>
+                        <li><strong>Engineering:</strong> Mechanical, Civil, Electrical, Aerospace, Chemical, etc.</li>
+                        <li><strong>Research:</strong> Physics, Chemistry, Mathematics</li>
+                        <li><strong>Technology:</strong> Data Science, Artificial Intelligence, Computer Science</li>
+                        <li><strong>Architecture:</strong> Urban planning, landscape design</li>
+                        <li><strong>Defense:</strong> Technical roles in armed forces</li>
+                        <li><strong>Pure Sciences:</strong> Theoretical research, academia</li>
+                    </ul>
+                    
+                    <h3>Required Skills:</h3>
+                    <ul>
+                        <li>Strong analytical and problem-solving abilities</li>
+                        <li>Mathematical aptitude</li>
+                        <li>Scientific curiosity</li>
+                        <li>Attention to detail</li>
+                        <li>Logical reasoning</li>
+                        <li>Experimental mindset</li>
+                    </ul>
+                    
+                    <h3>Top Colleges:</h3>
+                    <ul>
+                        <li>IITs (Indian Institutes of Technology)</li>
+                        <li>NITs (National Institutes of Technology)</li>
+                        <li>BITS Pilani</li>
+                        <li>Delhi University</li>
+                        <li>Anna University</li>
+                        <li>Jadavpur University</li>
+                    </ul>
+                    
+                    <h3>Entrance Exams:</h3>
+                    <ul>
+                        <li>JEE Main & Advanced</li>
+                        <li>BITSAT</li>
+                        <li>VITEEE</li>
+                        <li>SAT (for international universities)</li>
+                    </ul>
                 `;
-                careerCards.appendChild(card);
-                
-                // Add event listener to analyze skill gap button
-                card.querySelector('.btn').addEventListener('click', analyzeSkillGap);
-            });
-        }
-
-        // Analyze skill gap for selected career
-        function analyzeSkillGap(e) {
-            const career = e.target.dataset.career;
-            const skills = skillGapData[career];
-            
-            // Scroll to skill gap section
-            document.getElementById('skills').scrollIntoView({ behavior: 'smooth' });
-            
-            // Generate skill gap analysis
-            skillGapContainer.innerHTML = `
-                <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 2rem;">Skill Gap Analysis for ${career}</h3>
-            `;
-            
-            skills.forEach(skill => {
-                const skillGapItem = document.createElement('div');
-                skillGapItem.className = 'skill-gap-item';
-                skillGapItem.innerHTML = `
-                    <div class="skill-gap-header">
-                        <h4>${skill.skill}</h4>
-                        <span class="proficiency">${skill.proficiency}%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: ${skill.proficiency}%"></div>
-                    </div>
-                    <div class="learning-resources">
-                        <h4>Learning Resources:</h4>
-                        ${skill.resources.map(resource => `<a href="#" class="resource-link">${resource}</a>`).join('')}
-                    </div>
+            } else if (stream === 'computer') {
+                modalTitle.textContent = 'Computer Science & Engineering Career Paths';
+                modalContent.innerHTML = `
+                    <p>Computer Science & Engineering is a rapidly growing field with diverse opportunities in software development, AI, cybersecurity, and more.</p>
+                    
+                    <h3>Top Career Options:</h3>
+                    <ul>
+                        <li><strong>Software Development:</strong> Web, mobile, enterprise applications</li>
+                        <li><strong>Artificial Intelligence:</strong> Machine learning, deep learning, NLP</li>
+                        <li><strong>Cybersecurity:</strong> Ethical hacking, security analysis</li>
+                        <li><strong>Data Science:</strong> Big data, analytics, visualization</li>
+                        <li><strong>Game Development:</strong> Design, programming, testing</li>
+                        <li><strong>Cloud Computing:</strong> AWS, Azure, Google Cloud</li>
+                        <li><strong>Blockchain Development:</strong> Cryptocurrency, smart contracts</li>
+                    </ul>
+                    
+                    <h3>Required Skills:</h3>
+                    <ul>
+                        <li>Programming proficiency (Python, Java, C++, etc.)</li>
+                        <li>Algorithmic thinking</li>
+                        <li>Problem-solving abilities</li>
+                        <li>Continuous learning mindset</li>
+                        <li>Teamwork and communication</li>
+                        <li>Understanding of data structures</li>
+                    </ul>
+                    
+                    <h3>Top Colleges:</h3>
+                    <ul>
+                        <li>IIT Bombay, Delhi, Madras</li>
+                        <li>IIITs (Indian Institutes of Information Technology)</li>
+                        <li>BITS Pilani</li>
+                        <li>DTU (Delhi Technological University)</li>
+                        <li>NSIT (Netaji Subhas Institute of Technology)</li>
+                        <li>Manipal Institute of Technology</li>
+                    </ul>
+                    
+                    <h3>Entrance Exams:</h3>
+                    <ul>
+                        <li>JEE Main & Advanced</li>
+                        <li>BITSAT</li>
+                        <li>VITEEE</li>
+                        <li>SAT (for international universities)</li>
+                    </ul>
                 `;
-                skillGapContainer.appendChild(skillGapItem);
-            });
+            } else if (stream === 'data') {
+                modalTitle.textContent = 'Data Science Career Paths';
+                modalContent.innerHTML = `
+                    <p>Data Science combines statistics, programming, and domain knowledge to extract insights from data and drive decision-making.</p>
+                    
+                    <h3>Top Career Options:</h3>
+                    <ul>
+                        <li><strong>Data Scientist:</strong> Analyzing complex data to solve business problems</li>
+                        <li><strong>Data Analyst:</strong> Interpreting data and creating reports</li>
+                        <li><strong>Machine Learning Engineer:</strong> Building predictive models</li>
+                        <li><strong>Business Intelligence Analyst:</strong> Creating dashboards and reports</li>
+                        <li><strong>Data Engineer:</strong> Building and maintaining data infrastructure</li>
+                        <li><strong>Research Scientist:</strong> Advancing data science methodologies</li>
+                    </ul>
+                    
+                    <h3>Required Skills:</h3>
+                    <ul>
+                        <li>Statistical analysis</li>
+                        <li>Programming (Python, R, SQL)</li>
+                        <li>Data visualization</li>
+                        <li>Machine learning algorithms</li>
+                        <li>Business acumen</li>
+                        <li>Data wrangling and cleaning</li>
+                    </ul>
+                    
+                    <h3>Top Colleges:</h3>
+                    <ul>
+                        <li>IIMs (for business analytics)</li>
+                        <li>IITs (for technical data science)</li>
+                        <li>ISI (Indian Statistical Institute)</li>
+                        <li>IIIT Bangalore</li>
+                        <li>Great Lakes Institute of Management</li>
+                        <li>UpGrad, Coursera (online programs)</li>
+                    </ul>
+                    
+                    <h3>Certifications:</h3>
+                    <ul>
+                        <li>IBM Data Science Professional Certificate</li>
+                        <li>Google Data Analytics Professional Certificate</li>
+                        <li>Microsoft Certified: Azure Data Scientist</li>
+                        <li>AWS Certified Machine Learning</li>
+                    </ul>
+                `;
+            }
+            
+            modal.style.display = 'flex';
         }
-
-        // Show notification
-        function showNotification(message, isError = false) {
+        
+        // Close Modal
+        closeModal.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.closest('.modal').style.display = 'none';
+            });
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+        
+        // Notification Function
+        function showNotification(message, type = 'success') {
             notificationMessage.textContent = message;
             
-            if (isError) {
-                notification.classList.add('error');
-                notification.querySelector('.material-symbols-rounded').textContent = 'error';
-            } else {
-                notification.classList.remove('error');
-                notification.querySelector('.material-symbols-rounded').textContent = 'check_circle';
-            }
+            // Set notification type
+            notification.className = 'notification';
+            notification.classList.add(type);
             
+            // Set icon based on type
+            const icon = notification.querySelector('.notification-icon i');
+            icon.className = type === 'success' ? 'fas fa-check-circle' : 
+                           type === 'error' ? 'fas fa-exclamation-circle' : 
+                           'fas fa-info-circle';
+            
+            // Show notification
             notification.classList.add('show');
             
+            // Hide after 3 seconds
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
-
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init);
+        
+        // User Account Functions
+        function loadUser() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = savedUser;
+                userAvatar.textContent = savedUser.charAt(0).toUpperCase();
+                getStartedBtn.textContent = 'Dashboard';
+                
+                // Update profile section
+                document.getElementById('profileName').textContent = savedUser;
+                document.getElementById('profileEmail').textContent = `${savedUser}@example.com`;
+                document.getElementById('profileAvatar').textContent = savedUser.charAt(0).toUpperCase();
+            }
+        }
+        
+        // Profile Menu Navigation
+        profileMenuLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Update active link
+                profileMenuLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = link.getAttribute('data-section');
+                profileSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Community Section
+        askQuestionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            questionForm.classList.add('active');
+            questionForm.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        cancelQuestion.addEventListener('click', () => {
+            questionForm.classList.remove('active');
+            newQuestionForm.reset();
+            // Clear tags
+            const tags = tagsInput.querySelectorAll('.tag');
+            tags.forEach(tag => tag.remove());
+        });
+        
+        newQuestionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('questionTitle').value;
+            const description = document.getElementById('questionDescription').value;
+            const tags = Array.from(tagsInput.querySelectorAll('.tag')).map(tag => tag.querySelector('.tag-text').textContent);
+            
+            // In a real app, this would be sent to a server
+            console.log('New question:', { title, description, tags });
+            
+            // Show notification
+            showNotification('Question posted successfully!', 'success');
+            
+            // Reset form
+            newQuestionForm.reset();
+            questionForm.classList.remove('active');
+            
+            // Clear tags
+            const tagElements = tagsInput.querySelectorAll('.tag');
+            tagElements.forEach(tag => tag.remove());
+        });
+        
+        // Initialize Tags Input
+        function initTagsInput() {
+            tagInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    
+                    const tagText = tagInput.value.trim();
+                    if (tagText) {
+                        addTag(tagText);
+                        tagInput.value = '';
+                    }
+                }
+            });
+            
+            // Handle tag removal
+            tagsInput.addEventListener('click', (e) => {
+                if (e.target.classList.contains('tag-remove')) {
+                    e.target.closest('.tag').remove();
+                }
+            });
+        }
+        
+        function addTag(text) {
+            const tag = document.createElement('div');
+            tag.className = 'tag';
+            tag.innerHTML = `
+                <span class="tag-text">${text}</span>
+                <span class="tag-remove">&times;</span>
+            `;
+            
+            tagsInput.insertBefore(tag, tagInput);
+        }
+        
+        // Stats Counter
+        function initStatsCounter() {
+            stats.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-target'));
+                const increment = target / 200;
+                let current = 0;
+                
+                const updateCount = () => {
+                    current += increment;
+                    if (current < target) {
+                        stat.textContent = Math.ceil(current);
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        stat.textContent = target;
+                    }
+                };
+                
+                // Start counter when element is in view
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCount();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                observer.observe(stat);
+            });
+        }
+        
+        // Skills Chart
+        function initSkillsChart() {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Analytical Thinking',
+                        'Creativity',
+                        'Technical Skills',
+                        'Communication',
+                        'Problem Solving',
+                        'Leadership',
+                        'Research',
+                        'Adaptability'
+                    ],
+                    datasets: [{
+                        label: 'Your Skills Profile',
+                        data: [90, 75, 85, 70, 95, 65, 80, 85],
+                        backgroundColor: 'rgba(67, 97, 238, 0.2)',
+                        borderColor: 'rgba(67, 97, 238, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(67, 97, 238, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(67, 97, 238, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Your Skills Assessment',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
